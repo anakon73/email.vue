@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vueuse/core": "^9.10.0",
     "commitizen": "^4.2.6",
     "unplugin-vue-components": "^0.22.12",
     "vue": "^3.2.45"

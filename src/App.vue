@@ -1,5 +1,5 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div>Hello World!</div>
+  <div class="text-2xl underline">Hello World!</div>
 </template>

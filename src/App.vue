@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { email } from '@/types/emailType'
+import { type email } from '@/types/emailType'
+import { ref, computed } from 'vue'
 
-const emails: email[] = [
+const emails = ref<email[]>([
   {
     id: 1,
     from: 'team@vuemastery.com',
@@ -40,9 +41,58 @@ const emails: email[] = [
     archived: true,
     read: false,
   },
+])
+
+const checkboxClasses: string[] = [
+  'appearance-none',
+  'cursor-pointer',
+  'w-6',
+  'h-6',
+  'bg-white',
+  'rounded-sm',
+  'border',
+  'border-neutral-600',
+  'relative align-middle',
+  'p-2.5',
+  'checked:bg-slate-500',
 ]
+
+const mailClasses = computed(() => {
+  return (email: email) => [
+    ['cursor-pointer', 'bg-white', 'h-[2.5rem]'],
+    email.read ? 'bg-zinc-100' : '',
+  ]
+})
 </script>
 
 <template>
-  <h1 class="text-[2rem] font-bold">VMail Inbox</h1>
+  <h1 class="text-[2rem] font-bold mb-3">VMail Inbox</h1>
+
+  <table class="max-w-[62.5rem] m-auto border-collapse">
+    <tbody>
+      <tr
+        v-for="email in emails"
+        :key="email.id"
+        :class="mailClasses(email)"
+        @click="email.read = true"
+      >
+        <td class="border-b border-t border-black p-1 text-left">
+          <input type="checkbox" :class="checkboxClasses" />
+        </td>
+        <td class="border-b border-t border-black p-1 text-left">
+          {{ email.from }}
+        </td>
+        <td class="border-b border-t border-black p-1 text-left">
+          <p class="max-h-[1.2rem] overflow-y-hidden m-0">
+            <span class="font-bold"
+              >{{ email.subject }} - {{ email.body }}</span
+            >
+          </p>
+        </td>
+        <td class="w-[7.5rem] border-b border-t border-black p-1 text-left">
+          {{ email.sentAt }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>

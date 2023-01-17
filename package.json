@@ -12,6 +12,7 @@
     "@vueuse/core": "^9.10.0",
     "axios": "^1.2.2",
     "commitizen": "^4.2.6",
+    "date-fns": "^2.29.3",
     "unplugin-vue-components": "^0.22.12",
     "vue": "^3.2.45"
   },

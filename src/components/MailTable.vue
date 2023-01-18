@@ -7,7 +7,7 @@ import { format } from 'date-fns'
 const emails = ref<email[]>([])
 
 await axios
-  .get('https://my-json-server.typicode.com/anakon73/gmail.vue/emails')
+  .get('http://localhost:3000/emails')
   .then((res) => {
     emails.value = res.data
   })

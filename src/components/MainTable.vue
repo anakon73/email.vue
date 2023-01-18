@@ -1,7 +1,17 @@
 <script setup lang="ts">
 import { type email } from '@/types/emailType'
 import { ref, computed } from 'vue'
+import axios from 'axios'
 import { format } from 'date-fns'
+
+axios
+  .get('https://my-json-server.typicode.com/anakon73/gmail.vue/emails')
+  .then((res) => {
+    emails.value = res.data
+  })
+  .catch((error) => {
+    console.log(error)
+  })
 
 const emails = ref<email[]>([])
 

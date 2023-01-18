@@ -6,6 +6,8 @@ import axios from 'axios'
 
 const emails = ref<email[]>([])
 
+const openedEmail = ref<email>()
+
 await axios
   .get('http://localhost:3000/emails')
   .then((res) => {
@@ -47,9 +49,10 @@ const updateEmail = (email: email) => {
   axios.put(`http://localhost:3000/emails/${email.id}`, email)
 }
 
-const readEmail = (email: email) => {
+const openEmail = (email: email) => {
   email.read = true
   updateEmail(email)
+  openedEmail.value = email
 }
 
 const archiveEmail = (email: email) => {
@@ -65,7 +68,7 @@ const archiveEmail = (email: email) => {
         v-for="email in unarchivedEmails"
         :key="email.id"
         :class="mailClasses(email)"
-        @click="readEmail(email)"
+        @click="openEmail(email)"
       >
         <td class="border-b border-t border-black p-2 text-left">
           <input type="checkbox" :class="checkboxClasses" />
@@ -93,4 +96,5 @@ const archiveEmail = (email: email) => {
       </tr>
     </tbody>
   </table>
+  <MailView v-if="openedEmail" :email="openedEmail" />
 </template>

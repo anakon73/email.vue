@@ -25,3 +25,6 @@ dist-ssr
 
 #project files
 components.d.ts
+
+#backend files
+db.json

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { type email } from '@/types/emailType'
 import { ref, computed } from 'vue'
-import axios from 'axios'
 import { format } from 'date-fns'
+import axios from 'axios'
 
 const emails = ref<email[]>([])
 
@@ -42,6 +42,20 @@ const sortedEmails = computed(() => {
 const unarchivedEmails = computed(() => {
   return sortedEmails.value.filter((e) => !e.archived)
 })
+
+const updateEmail = (email: email) => {
+  axios.put(`http://localhost:3000/emails/${email.id}`, email)
+}
+
+const readEmail = (email: email) => {
+  email.read = true
+  updateEmail(email)
+}
+
+const archiveEmail = (email: email) => {
+  email.archived = true
+  updateEmail(email)
+}
 </script>
 
 <template>
@@ -51,7 +65,7 @@ const unarchivedEmails = computed(() => {
         v-for="email in unarchivedEmails"
         :key="email.id"
         :class="mailClasses(email)"
-        @click="email.read = true"
+        @click="readEmail(email)"
       >
         <td class="border-b border-t border-black p-2 text-left">
           <input type="checkbox" :class="checkboxClasses" />
@@ -70,7 +84,7 @@ const unarchivedEmails = computed(() => {
         </td>
         <td class="border-b border-t border-black p-1 text-left">
           <button
-            @click="email.archived = true"
+            @click="archiveEmail(email)"
             class="p-2 rounded mt-[5px] mr-2.5 mb-[5px] border bg-slate-100"
           >
             Archive

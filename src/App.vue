@@ -5,7 +5,7 @@
 
   <Suspense>
     <template #default>
-      <MainTable />
+      <MailTable />
     </template>
     <template #fallback> Loading... </template>
   </Suspense>

@@ -4,18 +4,16 @@ import { ref, computed } from 'vue'
 import axios from 'axios'
 import { format } from 'date-fns'
 
-setTimeout(() => {
-  axios
-    .get('https://my-json-server.typicode.com/anakon73/gmail.vue/emails')
-    .then((res) => {
-      emails.value = res.data
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-}, 1000)
-
 const emails = ref<email[]>([])
+
+await axios
+  .get('https://my-json-server.typicode.com/anakon73/gmail.vue/emails')
+  .then((res) => {
+    emails.value = res.data
+  })
+  .catch((error: Error) => {
+    error
+  })
 
 const checkboxClasses: string[] = [
   'appearance-none',

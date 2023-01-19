@@ -96,5 +96,7 @@ const archiveEmail = (email: email) => {
       </tr>
     </tbody>
   </table>
-  <MailView v-if="openedEmail" :email="openedEmail" />
+  <ModalView v-if="openedEmail">
+    <MailView :email="openedEmail" />
+  </ModalView>
 </template>

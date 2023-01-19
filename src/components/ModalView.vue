@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { onClickOutside } from '@vueuse/core'
+import { onClickOutside, onKeyDown } from '@vueuse/core'
 
 const modal = ref()
 
 const emits = defineEmits(['closeModal'])
 
-onClickOutside(modal, () => {
+const closeModal = () => {
   emits('closeModal')
-})
+}
+
+onClickOutside(modal, () => closeModal())
+onKeyDown('Escape', () => closeModal())
 </script>
 
 <template>

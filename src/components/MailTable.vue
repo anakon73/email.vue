@@ -6,7 +6,7 @@ import axios from 'axios'
 
 const emails = ref<email[]>([])
 
-const openedEmail = ref<email>()
+const openedEmail = ref<email | null>(null)
 
 await axios
   .get('http://localhost:3000/emails')
@@ -96,7 +96,7 @@ const archiveEmail = (email: email) => {
       </tr>
     </tbody>
   </table>
-  <ModalView v-if="openedEmail">
+  <ModalView @closeModal="openedEmail = null" v-if="openedEmail">
     <MailView :email="openedEmail" />
   </ModalView>
 </template>

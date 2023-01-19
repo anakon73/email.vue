@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@types/marked": "^4.0.8",
-    "@vueuse/core": "^9.10.0",
+    "@vueuse/core": "^9.11.0",
     "axios": "^1.2.2",
     "commitizen": "^4.2.6",
     "date-fns": "^2.29.3",

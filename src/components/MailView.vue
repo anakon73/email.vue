@@ -26,6 +26,6 @@ const markdownToHTML = computed(() => {
         {{ format(new Date(email.sentAt), 'MMM do yyyy') }}</em
       >
     </div>
-    <div class="prose" v-html="markdownToHTML" />
+    <div class="prose-xl" v-html="markdownToHTML" />
   </div>
 </template>

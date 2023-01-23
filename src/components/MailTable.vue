@@ -68,9 +68,12 @@ const updateEmail = (email: email) => {
 }
 
 const openEmail = (email: email) => {
-  email.read = true
-  updateEmail(email)
   openedEmail.value = email
+
+  if (email) {
+    email.read = true
+    updateEmail(email)
+  }
 }
 
 const archiveEmail = (email: email) => {

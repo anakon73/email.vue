@@ -4,6 +4,24 @@ import { ref, computed } from 'vue'
 import { format } from 'date-fns'
 import axios from 'axios'
 
+type changeEmail = {
+  toggleArchive: boolean
+  toggleRead: boolean
+  save: boolean
+  closeModal: boolean
+  changeIndex: number
+}
+
+// const emptyEmail: email = {
+//   id: 0,
+//   from: '',
+//   subject: '',
+//   body: '',
+//   sentAt: '',
+//   archived: false,
+//   read: false,
+// }
+
 const emails = ref<email[]>([])
 
 const openedEmail = ref<email | null>(null)
@@ -50,14 +68,33 @@ const updateEmail = (email: email) => {
 }
 
 const openEmail = (email: email) => {
-  email.read = true
-  updateEmail(email)
   openedEmail.value = email
+
+  if (email) {
+    email.read = true
+    updateEmail(email)
+  }
 }
 
 const archiveEmail = (email: email) => {
   email.archived = true
   updateEmail(email)
+}
+
+const changeEmail = (funcs: changeEmail) => {
+  if (openedEmail.value !== null) {
+    let email: email = openedEmail.value
+    if (funcs.toggleRead) email.read = !email?.read
+    if (funcs.toggleArchive) email.archived = !email?.archived
+    if (funcs.save) updateEmail(email)
+    if (funcs.closeModal) openedEmail.value = null
+    if (funcs.changeIndex) {
+      let emails = unarchivedEmails.value
+      let currentIndex = emails.indexOf(openedEmail.value)
+      let newEmail = emails[currentIndex + funcs.changeIndex]
+      openEmail(newEmail)
+    }
+  }
 }
 </script>
 
@@ -97,6 +134,6 @@ const archiveEmail = (email: email) => {
     </tbody>
   </table>
   <ModalView @closeModal="openedEmail = null" v-if="openedEmail">
-    <MailView :email="openedEmail" />
+    <MailView :email="openedEmail" @changeEmail="changeEmail" />
   </ModalView>
 </template>

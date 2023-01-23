@@ -90,9 +90,9 @@ const changeEmail = (funcs: changeEmail) => {
     if (funcs.closeModal) openedEmail.value = null
     if (funcs.changeIndex) {
       let emails = unarchivedEmails.value
-      let currentIndex = emails.indexOf(openedEmail.value)
+      let currentIndex = emails.indexOf(openedEmail.value!)
       let newEmail = emails[currentIndex + funcs.changeIndex]
-      openEmail(newEmail)
+      openEmail(newEmail!)
     }
   }
 }

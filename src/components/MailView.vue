@@ -12,18 +12,30 @@ type Props = {
 const props = defineProps<Props>()
 const { email } = toRefs(props)
 
+const emits = defineEmits(['changeEmail'])
+
 const markdownToHTML = computed(() => {
   return marked(email.value.body)
 })
 
-const toggleRead = () => {
-  email.value.read = !email.value.read
-  axios.put(`http://localhost:3000/emails/${email.value.id}`, email)
-}
-const toggleArchive = () => {
-  email.value.archived = !email.value.archived
-  axios.put(`http://localhost:3000/emails/${email.value.id}`, email)
-}
+const toggleRead = () => emits('changeEmail', { toggleRead: true, save: true })
+const toggleArchive = () =>
+  emits('changeEmail', { toggleArchive: true, save: true, closeModal: true })
+const goNewer = () => emits('changeEmail', { changeIndex: -1 })
+const goOlder = () => emits('changeEmail', { changeIndex: 1 })
+const goNewerAndArchive = () =>
+  emits('changeEmail', { changeIndex: -1, toggleArchive: true, save: true })
+const goOlderAndArchive = () =>
+  emits('changeEmail', { changeIndex: 1, toggleArchive: true, save: true })
+
+// const toggleRead = () => {
+//   email.value.read = !email.value.read
+//   axios.put(`http://localhost:3000/emails/${email.value.id}`, email)
+// }
+// const toggleArchive = () => {
+//   email.value.archived = !email.value.archived
+//   axios.put(`http://localhost:3000/emails/${email.value.id}`, email)
+// }
 
 const buttonClasses = [
   'p-2',
@@ -40,6 +52,18 @@ onKeyDown(['R', 'r'], () => {
 })
 onKeyDown(['E', 'e'], () => {
   toggleArchive()
+})
+onKeyDown(['K', 'k'], () => {
+  goNewer()
+})
+onKeyDown(['J', 'j'], () => {
+  goOlder()
+})
+onKeyDown(['['], () => {
+  goNewerAndArchive()
+})
+onKeyDown([']'], () => {
+  goOlderAndArchive()
 })
 </script>
 

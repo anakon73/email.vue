@@ -49,6 +49,16 @@ const checkboxClasses: string[] = [
   'checked:bg-slate-500',
 ]
 
+const selected = ref(new Set())
+const emailSelection = {
+  emails: selected,
+  toggle(email: email) {
+    if (selected.value.has(email)) selected.value.delete(email)
+    else selected.value.add(email)
+    console.log(selected)
+  },
+}
+
 const mailClasses = computed(() => {
   return (email: email) => [
     ['cursor-pointer', 'bg-white', 'h-[2.5rem]'],
@@ -90,36 +100,52 @@ const changeEmail = (funcs: changeEmail) => {
     if (funcs.closeModal) openedEmail.value = null
     if (funcs.changeIndex) {
       let emails = unarchivedEmails.value
-      let currentIndex = emails.indexOf(openedEmail.value)
+      let currentIndex = emails.indexOf(openedEmail.value!)
       let newEmail = emails[currentIndex + funcs.changeIndex]
-      openEmail(newEmail)
+      openEmail(newEmail!)
     }
   }
 }
 </script>
 
 <template>
+  <div class="text-2xl font-semibold mb-6">
+    {{ emailSelection.emails.value.size }} emails selected
+  </div>
   <table class="max-w-[62.5rem] m-auto border-collapse">
     <tbody>
       <tr
         v-for="email in unarchivedEmails"
         :key="email.id"
         :class="mailClasses(email)"
-        @click="openEmail(email)"
       >
         <td class="border-b border-t border-black p-2 text-left">
-          <input type="checkbox" :class="checkboxClasses" />
+          <input
+            type="checkbox"
+            :class="checkboxClasses"
+            @click="emailSelection.toggle(email)"
+            :selected="emailSelection.emails.value.has(email)"
+          />
         </td>
-        <td class="border-b border-t border-black p-1 text-left">
+        <td
+          @click="openEmail(email)"
+          class="border-b border-t border-black p-1 text-left"
+        >
           {{ email.from }}
         </td>
-        <td class="border-b border-t border-black p-1 text-left">
+        <td
+          @click="openEmail(email)"
+          class="border-b border-t border-black p-1 text-left"
+        >
           <p class="max-h-[1.4rem] overflow-y-hidden m-0">
             <span class="font-bold">{{ email.subject }} - </span
             >{{ email.body }}
           </p>
         </td>
-        <td class="w-[7.5rem] border-b border-t border-black p-1 text-left">
+        <td
+          @click="openEmail(email)"
+          class="w-[7.5rem] border-b border-t border-black p-1 text-left"
+        >
           {{ format(new Date(email.sentAt), 'MMM do yyyy') }}
         </td>
         <td class="border-b border-t border-black p-1 text-left">

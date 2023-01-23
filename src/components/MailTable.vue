@@ -105,21 +105,29 @@ const changeEmail = (funcs: changeEmail) => {
         v-for="email in unarchivedEmails"
         :key="email.id"
         :class="mailClasses(email)"
-        @click="openEmail(email)"
       >
         <td class="border-b border-t border-black p-2 text-left">
           <input type="checkbox" :class="checkboxClasses" />
         </td>
-        <td class="border-b border-t border-black p-1 text-left">
+        <td
+          @click="openEmail(email)"
+          class="border-b border-t border-black p-1 text-left"
+        >
           {{ email.from }}
         </td>
-        <td class="border-b border-t border-black p-1 text-left">
+        <td
+          @click="openEmail(email)"
+          class="border-b border-t border-black p-1 text-left"
+        >
           <p class="max-h-[1.4rem] overflow-y-hidden m-0">
             <span class="font-bold">{{ email.subject }} - </span
             >{{ email.body }}
           </p>
         </td>
-        <td class="w-[7.5rem] border-b border-t border-black p-1 text-left">
+        <td
+          @click="openEmail(email)"
+          class="w-[7.5rem] border-b border-t border-black p-1 text-left"
+        >
           {{ format(new Date(email.sentAt), 'MMM do yyyy') }}
         </td>
         <td class="border-b border-t border-black p-1 text-left">

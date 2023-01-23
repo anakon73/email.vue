@@ -49,6 +49,16 @@ const checkboxClasses: string[] = [
   'checked:bg-slate-500',
 ]
 
+const selected = ref(new Set())
+const emailSelection = {
+  emails: selected,
+  toggle(email: email) {
+    if (selected.value.has(email)) selected.value.delete(email)
+    else selected.value.add(email)
+    console.log(selected)
+  },
+}
+
 const mailClasses = computed(() => {
   return (email: email) => [
     ['cursor-pointer', 'bg-white', 'h-[2.5rem]'],
@@ -99,6 +109,9 @@ const changeEmail = (funcs: changeEmail) => {
 </script>
 
 <template>
+  <div class="text-2xl font-semibold mb-6">
+    {{ emailSelection.emails.value.size }} emails selected
+  </div>
   <table class="max-w-[62.5rem] m-auto border-collapse">
     <tbody>
       <tr
@@ -107,7 +120,12 @@ const changeEmail = (funcs: changeEmail) => {
         :class="mailClasses(email)"
       >
         <td class="border-b border-t border-black p-2 text-left">
-          <input type="checkbox" :class="checkboxClasses" />
+          <input
+            type="checkbox"
+            :class="checkboxClasses"
+            @click="emailSelection.toggle(email)"
+            :selected="emailSelection.emails.value.has(email)"
+          />
         </td>
         <td
           @click="openEmail(email)"

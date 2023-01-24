@@ -3,6 +3,7 @@ import { type email } from '@/types/emailType'
 import { ref, computed } from 'vue'
 import { format } from 'date-fns'
 import axios from 'axios'
+import updateEmail from '@/composables/updateEmail'
 
 type changeEmail = {
   toggleArchive: boolean
@@ -72,10 +73,6 @@ const unarchivedEmails = computed(() => {
   return sortedEmails.value.filter((e) => !e.archived)
 })
 
-const updateEmail = (email: email) => {
-  axios.put(`http://localhost:3000/emails/${email.id}`, email)
-}
-
 const openEmail = (email: email) => {
   openedEmail.value = email
 
@@ -108,9 +105,6 @@ const changeEmail = (funcs: changeEmail) => {
 </script>
 
 <template>
-  <div class="text-2xl font-semibold mb-6">
-    {{ emailSelection.emails.value.size }} emails selected
-  </div>
   <BulkActionBar
     :emails="unarchivedEmails"
     :emailSelection="emailSelection.emails"

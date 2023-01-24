@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import updateEmail from '@/composables/updateEmail'
 import { email } from '@/types/emailType'
+import { clear } from 'console'
 import { ref, toRefs, computed } from 'vue'
 
 interface Set<T> {
@@ -33,14 +35,39 @@ const checkboxClasses: string[] = [
   'relative align-middle',
   'p-2.5',
   'checked:bg-slate-500',
+  'm-[0.313rem]',
+  'ml-2',
+  'mr-1.5',
 ]
 
 const bulkSelect = () => {
   if (allEmailsSelected.value) {
     emailSelection.value.clear()
   } else {
-    emails.value.forEach((item: email) => emailSelection.value.add(item))
+    emails.value.forEach((email: email) => emailSelection.value.add(email))
   }
+}
+
+const markRead = () => {
+  emailSelection.value.forEach((email: email) => {
+    email.read = true
+    updateEmail(email)
+  })
+}
+
+const markUnread = () => {
+  emailSelection.value.forEach((email: email) => {
+    email.read = false
+    updateEmail(email)
+  })
+}
+
+const markArchive = () => {
+  emailSelection.value.forEach((email: email) => {
+    email.archived = true
+    updateEmail(email)
+  })
+  emailSelection.value.clear()
 }
 
 const numberSelected = computed(() => emailSelection.value.size)
@@ -54,16 +81,38 @@ const someEmailsSelected = computed(
 </script>
 
 <template>
-  <div>
-    <div class="text-3xl">{{ emails.length }}</div>
-    <div class="text-3xl">{{ emailSelection.size }}</div>
-    <div>
+  <div class="w-full max-w-[62.5rem] m-auto text-left pb-2 flex items-center">
+    <span>
       <input
+        class=""
         type="checkbox"
         :checked="allEmailsSelected"
         :class="[checkboxClasses, [someEmailsSelected ? ['bg-slate-300'] : []]]"
         @click="bulkSelect"
       />
-    </div>
+    </span>
+    <span>
+      <button
+        @click="markRead"
+        class="p-1 rounded mt-[5px] mr-2.5 mb-[5px] border bg-slate-100"
+        :disabled="[...emailSelection].every((e:email) => e.read)"
+      >
+        Mark Read
+      </button>
+      <button
+        @click="markUnread"
+        class="p-1 rounded mt-[5px] mr-2.5 mb-[5px] border bg-slate-100"
+        :disabled="[...emailSelection].every((e:email) => !e.read)"
+      >
+        Mark Unread
+      </button>
+      <button
+        @click="markArchive"
+        class="p-1 rounded mt-[5px] mr-2.5 mb-[5px] border bg-slate-100"
+        :disabled="numberSelected === 0"
+      >
+        Mark Archive
+      </button>
+    </span>
   </div>
 </template>

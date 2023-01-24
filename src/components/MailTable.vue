@@ -13,19 +13,9 @@ type changeEmail = {
   changeIndex: number
 }
 
-// const emptyEmail: email = {
-//   id: 0,
-//   from: '',
-//   subject: '',
-//   body: '',
-//   sentAt: '',
-//   archived: false,
-//   read: false,
-// }
-
 const emails = ref<email[]>([])
-
 const openedEmail = ref<email | null>(null)
+const selectedScreen = ref<string>('inbox')
 
 await axios
   .get('http://localhost:3000/emails')
@@ -69,8 +59,12 @@ const mailClasses = computed(() => {
 const sortedEmails = computed(() => {
   return emails.value.sort((el1, el2) => (el1.sentAt < el2.sentAt ? 1 : -1))
 })
-const unarchivedEmails = computed(() => {
-  return sortedEmails.value.filter((e) => !e.archived)
+const filteredEmails = computed(() => {
+  if (selectedScreen.value === 'inbox') {
+    return sortedEmails.value.filter((e) => !e.archived)
+  } else {
+    return sortedEmails.value.filter((e) => e.archived)
+  }
 })
 
 const openEmail = (email: email) => {
@@ -95,24 +89,45 @@ const changeEmail = (funcs: changeEmail) => {
     if (funcs.save) updateEmail(email)
     if (funcs.closeModal) openedEmail.value = null
     if (funcs.changeIndex) {
-      let emails = unarchivedEmails.value
+      let emails = filteredEmails.value
       let currentIndex = emails.indexOf(openedEmail.value!)
       let newEmail = emails[currentIndex + funcs.changeIndex]
       openEmail(newEmail!)
     }
   }
 }
+
+const selectScreen = (newScreen: string) => {
+  selectedScreen.value = newScreen
+  emailSelection.emails.value.clear()
+}
 </script>
 
 <template>
+  <div>
+    <button
+      class="disabled:opacity-60 p-1 rounded mt-[5px] mr-2.5 mb-[5px] border bg-slate-100"
+      @click="selectScreen('inbox')"
+      :disabled="selectedScreen === 'inbox'"
+    >
+      Inbox
+    </button>
+    <button
+      class="disabled:opacity-60 p-1 rounded mt-[5px] mr-2.5 mb-[5px] border bg-slate-100"
+      @click="selectScreen('archived')"
+      :disabled="selectedScreen === 'archived'"
+    >
+      Archived
+    </button>
+  </div>
   <BulkActionBar
-    :emails="unarchivedEmails"
+    :emails="filteredEmails"
     :emailSelection="emailSelection.emails"
   />
   <table class="max-w-[62.5rem] m-auto border-collapse">
     <tbody>
       <tr
-        v-for="email in unarchivedEmails"
+        v-for="email in filteredEmails"
         :key="email.id"
         :class="mailClasses(email)"
       >

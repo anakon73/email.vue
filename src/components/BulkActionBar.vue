@@ -94,21 +94,21 @@ const someEmailsSelected = computed(
     <span>
       <button
         @click="markRead"
-        class="p-1 rounded mt-[5px] mr-2.5 mb-[5px] border bg-slate-100"
+        class="disabled:opacity-60 p-1 rounded mt-[5px] mr-2.5 mb-[5px] border bg-slate-100"
         :disabled="[...emailSelection].every((e:email) => e.read)"
       >
         Mark Read
       </button>
       <button
         @click="markUnread"
-        class="p-1 rounded mt-[5px] mr-2.5 mb-[5px] border bg-slate-100"
+        class="disabled:opacity-60 p-1 rounded mt-[5px] mr-2.5 mb-[5px] border bg-slate-100"
         :disabled="[...emailSelection].every((e:email) => !e.read)"
       >
         Mark Unread
       </button>
       <button
         @click="markArchive"
-        class="p-1 rounded mt-[5px] mr-2.5 mb-[5px] border bg-slate-100"
+        class="disabled:opacity-60 p-1 rounded mt-[5px] mr-2.5 mb-[5px] border bg-slate-100"
         :disabled="numberSelected === 0"
       >
         Mark Archive

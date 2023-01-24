@@ -55,7 +55,6 @@ const emailSelection = {
   toggle(email: email) {
     if (selected.value.has(email)) selected.value.delete(email)
     else selected.value.add(email)
-    console.log(selected)
   },
 }
 
@@ -112,6 +111,10 @@ const changeEmail = (funcs: changeEmail) => {
   <div class="text-2xl font-semibold mb-6">
     {{ emailSelection.emails.value.size }} emails selected
   </div>
+  <BulkActionBar
+    :emails="unarchivedEmails"
+    :emailSelection="emailSelection.emails"
+  />
   <table class="max-w-[62.5rem] m-auto border-collapse">
     <tbody>
       <tr
@@ -124,7 +127,7 @@ const changeEmail = (funcs: changeEmail) => {
             type="checkbox"
             :class="checkboxClasses"
             @click="emailSelection.toggle(email)"
-            :selected="emailSelection.emails.value.has(email)"
+            :checked="emailSelection.emails.value.has(email)"
           />
         </td>
         <td
